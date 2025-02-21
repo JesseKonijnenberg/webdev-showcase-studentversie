@@ -19,7 +19,13 @@ class GDPR {
 
 
 //student uitwerking
-
+        let buttonReject = document.querySelector('.gdpr-consent__button--reject');
+        buttonReject.addEventListener('click', () => {
+            this.cookieStatus('reject');
+            this.showStatus();
+            this.showContent();
+            this.hideGDPR();
+        });
 
     }
 
@@ -31,12 +37,20 @@ class GDPR {
 
     }
 
+    saveDateTime() {
+        let date1 = new Date().getDate;
+        let time1 = new Date().getTime;
+        let dateTime = { date: date1 , time: time1 };
+        let result = JSON.stringify(dateTime);
+        localStorage.setItem('gdpr-consent-timedate', result);
+    }
+
     resetContent(){
         const classes = [
             '.content-gdpr-accept',
 
 //student uitwerking
-
+            '.content-gdpr-reject',
             '.content-gdpr-not-chosen'];
 
         for(const c of classes){
@@ -52,10 +66,13 @@ class GDPR {
 
     cookieStatus(status) {
 
-        if (status) localStorage.setItem('gdpr-consent-choice', status);
-
-//student uitwerking
-
+        if (status) {
+            localStorage.setItem('gdpr-consent-choice', status);
+            this.saveDateTime();
+        }
+            
+    //student uitwerking
+        
         return localStorage.getItem('gdpr-consent-choice');
     }
 
