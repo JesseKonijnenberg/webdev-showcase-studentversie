@@ -29,7 +29,10 @@ namespace ShowcaseAPI.Controllers
                 string fromEmail = form.Email;
                 string toEmail = "to@example.com";
                 string subject = form.Subject;
-                string body = $"Name: {form.FirstName} {form.LastName}\nEmail: {form.Email}\nPhone: {form.Phone}";
+                string body =   $"Name: {form.FirstName} {form.LastName}" +
+                                $"\nEmail: {form.Email}" +
+                                $"\nPhone: {form.Phone}" +
+                                $"\n Bericht: {form.Message}";
 
                 client.Send(fromEmail, toEmail, subject, body);
 

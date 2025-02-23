@@ -35,8 +35,8 @@ namespace Showcase_Contactpagina.Controllers
             if (userCaptchaAnswer != "7") // The correct answer to "3 + 4"
             {
                 ModelState.AddModelError("captcha", "Captcha is incorrect. Please try again.");
-                ViewBag.Message = "De ingevulde velden voldoen niet aan de gestelde voorwaarden";
-                return View(form); // Return with error message
+                ViewBag.Message = "Captcha is incorrect";
+                return View();
             }
 
             if (!ModelState.IsValid)
@@ -59,7 +59,7 @@ namespace Showcase_Contactpagina.Controllers
             //Hint: vergeet niet om de mailfunctionaliteit werkend te maken in ShowcaseAPI > Controllers > MailController.cs,
             //      nadat je een account hebt aangemaakt op Mailtrap (of een alternatief).
 
-            HttpResponseMessage response = await _httpClient.PostAsync("api/contact", content); // Vervang deze regel met het POST-request
+            HttpResponseMessage response = await _httpClient.PostAsync("api/mail", content); // Vervang deze regel met het POST-request
 
             if (!response.IsSuccessStatusCode)
             {
@@ -68,7 +68,7 @@ namespace Showcase_Contactpagina.Controllers
             }
 
             ViewBag.Message = "Het contactformulier is verstuurd";
-            
+
             return View();
         }
     }
