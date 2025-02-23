@@ -17,8 +17,34 @@ html, body {
     margin: 0;
     display: flex;
     flex-direction: column;
+    background-color: #1a1f1e;
+    color: #d4d4d4;
 }
 
 .container {
     flex: 1;
+}
+
+/*.navbar {
+    background-color: #252c2a;
+}*/
+
+.navbar {
+    background-color: #252c2a; !important;
+    border-bottom: 2px #3a453f;
+}
+
+.navbar .nav-link {
+    color: #d4d4d4 !important;
+}
+
+.navbar .nav-link:hover {
+    color: #a4e7c3;
+}
+
+.navbar-brand{
+    color:white;
+}
+.navbar-brand:hover {
+    color: #a4e7c3 !important;
 }

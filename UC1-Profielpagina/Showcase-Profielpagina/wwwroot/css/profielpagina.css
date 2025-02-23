@@ -2,6 +2,8 @@
 
 :root {
     --primary-color: #89e219;
+    --background-color: #1a1f1e;
+    --section-color: #252c2a;
 }
 
 
@@ -19,7 +21,7 @@
 }
 
 .profile {
-    background-color: #faf8f8;
+    background-color: #252c2a;
     width: 100%;
     border-radius: 15px;
 }

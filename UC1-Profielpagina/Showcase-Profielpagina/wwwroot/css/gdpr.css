@@ -6,6 +6,7 @@
 }
 
 .gdpr-consent {
+    background-color: #252c2a;
     display: flex;
     flex-direction: column;
     align-items: center;
