@@ -30,7 +30,16 @@ namespace Showcase_Contactpagina.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(Contactform form)
         {
-            if(!ModelState.IsValid)
+            var userCaptchaAnswer = Request.Form["captcha"];
+
+            if (userCaptchaAnswer != "7") // The correct answer to "3 + 4"
+            {
+                ModelState.AddModelError("captcha", "Captcha is incorrect. Please try again.");
+                ViewBag.Message = "De ingevulde velden voldoen niet aan de gestelde voorwaarden";
+                return View(form); // Return with error message
+            }
+
+            if (!ModelState.IsValid)
             {
                 ViewBag.Message = "De ingevulde velden voldoen niet aan de gestelde voorwaarden";
                 return View();
@@ -50,9 +59,9 @@ namespace Showcase_Contactpagina.Controllers
             //Hint: vergeet niet om de mailfunctionaliteit werkend te maken in ShowcaseAPI > Controllers > MailController.cs,
             //      nadat je een account hebt aangemaakt op Mailtrap (of een alternatief).
 
-            HttpResponseMessage response = new HttpResponseMessage(); // Vervang deze regel met het POST-request
+            HttpResponseMessage response = await _httpClient.PostAsync("api/contact", content); // Vervang deze regel met het POST-request
 
-            if(!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 ViewBag.Message = "Er is iets misgegaan";
                 return View();

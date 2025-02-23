@@ -4,6 +4,15 @@ namespace ShowcaseAPI.Models
 {
     public class Contactform
     {
+
+        [Required]
+        [StringLength(200)]
+        public string Subject { get; set; }
+
+        [Required]
+        [StringLength(600)]
+        public string Message { get; set; }
+
         [Required]
         [StringLength(60)]
         public string FirstName {  get; set; }
@@ -19,5 +28,8 @@ namespace ShowcaseAPI.Models
         [Required]
         [Phone]
         public string Phone { get; set; }
+
+        [Required]
+        public int Captcha { get; set; }
     }
 }

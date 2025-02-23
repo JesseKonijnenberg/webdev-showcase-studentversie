@@ -5,10 +5,34 @@
 
 <div class="page">
     <section class="contact">
-
+            
         <h1>Contact</h1>
+        <h3>Jesse Konijnenberg</h3>
+        <p>Welkom! Stuur mij een bericht</p>
         <p>@ViewBag.Message</p>
+
         <form method="post" class="form-contactpagina">
+
+            <!-- Captcha field -->
+            <div class="form-contactpagina__inputelement fx-col">
+                <label for="captcha">Wat is 3 + 4?</label>
+                <input type="text" asp-for="Captcha" name="captcha" id="captcha" required>
+                @if (ViewData.ModelState["captcha"] != null)
+                {
+                    <span class="text-danger">@ViewData.ModelState["captcha"].Errors[0].ErrorMessage</span>
+                }
+            </div>
+
+
+            <div class="form-contactpagina__inputelement fx-col">
+                <label for="message">Onderwerp: </label>
+                <input type="text" asp-for="Subject" name="subject" id="subject" required>
+            </div>
+
+            <div class="form-contactpagina__inputelement fx-col">
+                <label for="message">Bericht: </label>
+                <input type="text" asp-for="Message" name="message" id="message" required>
+            </div>
 
             <div class="form-contactpagina__inputelement fx-col">
                 <label for="firstname">Voornaam: </label>
@@ -108,7 +132,6 @@
                console.error('Er was een probleem met de formulierinzending:', error);
 
                alert(error.message)
-
                // Verwerk fouten hier
            });
    });
