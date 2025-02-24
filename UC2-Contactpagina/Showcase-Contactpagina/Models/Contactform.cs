@@ -30,5 +30,10 @@ namespace Showcase_Contactpagina.Models
 
         [Required]
         public int Captcha { get; set; }
+
+        [Required]
+        public string gRecaptchaResponse;
+        [Required]
+        public string __RequestVerificationToken;
     }
 }

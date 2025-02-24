@@ -1,22 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Net.Mail;
-using System.Net;
-using Showcase_Contactpagina.Models;
-using System.Numerics;
-using System.Text;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Showcase_Contactpagina.Models;
+using System;
 
 namespace Showcase_Contactpagina.Controllers
 {
     public class ContactController : Controller
     {
         private readonly HttpClient _httpClient;
-        public ContactController(HttpClient httpClient)
+        private readonly IConfiguration _configuration;
+
+        public ContactController(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri("https://localhost:7278");
+            _configuration = configuration;
         }
 
         // GET: ContactController
@@ -30,14 +32,32 @@ namespace Showcase_Contactpagina.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(Contactform form)
         {
-            var userCaptchaAnswer = Request.Form["captcha"];
-
-            if (userCaptchaAnswer != "7") // The correct answer to "3 + 4"
+            try
             {
-                ModelState.AddModelError("captcha", "Captcha is incorrect. Please try again.");
-                ViewBag.Message = "Captcha is incorrect";
+                var userCaptchaResponse = Request.Form["g-recaptcha-response"];
+                var secretKey = _configuration["Recaptcha:SecretKey"];
+
+                var captcharesponse = await _httpClient.PostAsync(
+                    $"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={userCaptchaResponse}",
+                    null);
+                var jsonResponse = await captcharesponse.Content.ReadAsStringAsync();
+                var recaptchaResult = JsonConvert.DeserializeObject<RecaptchaResponse>(jsonResponse);
+
+                if (!(recaptchaResult != null && recaptchaResult.Success))
+                {
+                    ModelState.AddModelError("captcha", "Captcha is incorrect. Please try again.");
+                    ViewBag.Message = "Captcha is incorrect";
+                    return View();
+                }
+            }
+            catch(Exception)
+            {
+                ViewBag.Message = "Er ging iets fout";
                 return View();
             }
+            
+
+            
 
             if (!ModelState.IsValid)
             {
@@ -71,5 +91,20 @@ namespace Showcase_Contactpagina.Controllers
 
             return View();
         }
+    }
+
+    public class RecaptchaResponse
+    {
+        [JsonProperty("success")]
+        public bool Success { get; set; }
+
+        [JsonProperty("challenge_ts")]
+        public string ChallengeTs { get; set; }
+
+        [JsonProperty("hostname")]
+        public string Hostname { get; set; }
+
+        [JsonProperty("error-codes")]
+        public List<string> ErrorCodes { get; set; }
     }
 }
